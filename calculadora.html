@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini-Calculadora</title>
+  <link rel="stylesheet" href="styles/stylecalculadora.css">
+  <style>
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <h1>Mini-Calculadora</h1>
+
+    <div class="row-inputs">
+      <input id="a" type="text" inputmode="decimal" placeholder="Número" />
+      <input id="b" type="text" inputmode="decimal" placeholder="Número" />
+      <div class="equal">=</div>
+      <input id="res" type="text" placeholder="Resultado" readonly />
+    </div>
+
+    <div class="btns">
+      <button class="op-btn" data-op="add">➕  Sumar</button>
+      <button class="op-btn" data-op="sub">➖  Restar</button>
+      <button class="op-btn" data-op="mul">✖️ Multiplicar</button>
+      <button class="op-btn" data-op="div">➗  Dividir</button>
+    </div>
+
+    <div class="small-note">Introduce números (enteros o decimales). Se manejan divisiones por cero.</div>
+  </main>
+
+  <script>
+    const aEl = document.getElementById('a');
+    const bEl = document.getElementById('b');
+    const resEl = document.getElementById('res');
+    const buttons = document.querySelectorAll('.op-btn');
+
+    function parseNumber(str){
+      if(!str) return NaN;
+      str = str.replace(',', '.');
+      return parseFloat(str);
+    }
+
+    function showResult(value){
+      if(Number.isFinite(value)){
+        resEl.value = (Math.round(value * 1000000)/1000000).toString();
+      } else {
+        resEl.value = 'Error';
+      }
+    }
+
+    function operate(op){
+      const a = parseNumber(aEl.value.trim());
+      const b = parseNumber(bEl.value.trim());
+      if(Number.isNaN(a) || Number.isNaN(b)){
+        resEl.value = 'Entrada inválida';
+        return;
+      }
+      let r;
+      switch(op){
+        case 'add': r = a + b; break;
+        case 'sub': r = a - b; break;
+        case 'mul': r = a * b; break;
+        case 'div':
+          if(b === 0){ resEl.value = 'División por 0'; return }
+          r = a / b; break;
+      }
+      showResult(r);
+    }
+
+    buttons.forEach(btn => btn.addEventListener('click', ()=> operate(btn.dataset.op)));
+
+    [aEl,bEl].forEach(input => input.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        operate('add');
+      }
+    }));
+  </script>
+</body>
+</html>
