@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Nómina</title>
+  <link rel="stylesheet" href="styles/stylenomina.css">
+  <style>
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <h2>Registro de Nómina</h2>
+    <form id="nominaForm">
+      <label>ID Empleado:</label>
+      <input type="text" id="idEmpleado" required oninput="validarAlfanumerico(this)">
+
+      <label>Nombre:</label>
+      <input type="text" id="nombre" required 
+             oninput="this.value=this.value.toUpperCase(); validarAlfanumerico(this);">
+
+      <label>Horas trabajadas (semana):</label>
+      <input type="number" id="horas" required>
+
+      <label>Costo por hora:</label>
+      <input type="number" id="costo" required>
+
+      <label>Horas Normales:</label>
+      <input type="text" id="horasNormales" readonly>
+
+      <label>Horas Extras:</label>
+      <input type="text" id="horasExtras" readonly>
+
+      <label>Subtotal:</label>
+      <input type="text" id="subtotal" readonly>
+
+      <label>ISPT (10%):</label>
+      <input type="text" id="ispt" readonly>
+
+      <label>Monto a Pagar:</label>
+      <input type="text" id="monto" readonly>
+
+      <div class="buttons">
+        <button type="button" class="calc" onclick="calcularNomina()">Calcular</button>
+        <button type="reset" class="clear">Limpiar</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function validarAlfanumerico(input){
+      input.value = input.value.replace(/[^a-zA-Z0-9 ]/g,"");
+    }
+
+    function calcularNomina(){
+      let horas = parseFloat(document.getElementById("horas").value);
+      let costo = parseFloat(document.getElementById("costo").value);
+
+      if(isNaN(horas) || isNaN(costo) || horas<=0 || costo<=0){
+        alert("Por favor ingrese valores válidos.");
+        return;
+      }
+
+      let horasNormales = Math.min(horas, 40);
+      let horasExtras = horas > 40 ? horas - 40 : 0;
+
+      let pagoNormales = horasNormales * costo;
+      let pagoExtras = horasExtras * costo * 2; // doble pago horas extra
+      let subtotal = pagoNormales + pagoExtras;
+
+      let ispt = subtotal * 0.10;
+      let monto = subtotal - ispt;
+
+      document.getElementById("horasNormales").value = horasNormales;
+      document.getElementById("horasExtras").value = horasExtras;
+      document.getElementById("subtotal").value = subtotal.toFixed(2);
+      document.getElementById("ispt").value = ispt.toFixed(2);
+      document.getElementById("monto").value = monto.toFixed(2);
+    }
+  </script>
+</body>
+</html>
