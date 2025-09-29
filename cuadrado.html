@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Escolar</title>
+  <link rel="stylesheet" href="styles/stylecuadrado.css">
+  <style>
+  </style>
+</head>
+<body>
+  <form name="form1">
+    <h2>Calculadora Escolar</h2>
+    
+    <label for="num1">Ingresa un número:</label>
+    <input type="number" name="num1" id="num1">
+
+    <label for="resultado">Resultado:</label>
+    <input type="text" name="resultado" id="resultado" readonly>
+
+    <input type="button" onclick="cuadrado()" value="Calcular Cuadrado">
+    <input type="button" onclick="borrar()" value="Borrar">
+  </form>
+
+  <script>
+    function cuadrado() {
+      var num1 = document.form1.num1.value;
+      if (num1 === "") {
+        alert("Por favor, ingresa un número.");
+        return;
+      }
+      var resultado = num1 * num1;
+      document.form1.resultado.value = resultado;
+    }
+
+    function borrar() {
+      document.form1.num1.value = "";
+      document.form1.resultado.value = "";
+    }
+  </script>
+</body>
+</html>
